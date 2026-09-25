@@ -6,8 +6,9 @@ const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
   try {
-    await db.sequelize.authenticate();
-    console.log('Database connected successfully.');
+    // Garante que as tabelas sejam criadas no primeiro deploy
+    await db.sequelize.sync();
+    console.log('Database connected and synced successfully.');
     
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
