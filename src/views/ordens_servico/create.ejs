@@ -1,0 +1,42 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Abrir Nova Ordem de Serviço</h1>
+    <p style="color: var(--on-surface-variant); font-size: 0.875rem;">Gerenciamento de registros</p>
+  </div>
+  <div class="dashboard-actions">
+    <a href="/ordens-servico" class="btn btn-secondary"><i data-feather="arrow-left"></i> Voltar</a>
+  </div>
+</div>
+
+<div class="card">
+  <form action="/ordens-servico" method="POST">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="form-group" style="grid-column: span 2;">
+        <label for="veiculo_id">Veículo (Cliente) *</label>
+        <select id="veiculo_id" name="veiculo_id" class="form-control" required>
+          <option value="">Selecione um veículo...</option>
+          <% veiculos.forEach(v => { %>
+            <option value="<%= v.id %>"><%= v.placa %> - <%= v.marca %> <%= v.modelo %> (<%= v.cliente.nome %>)</option>
+          <% }) %>
+        </select>
+        <small><a href="/clientes/novo">Novo Cliente/Veículo?</a></small>
+      </div>
+      
+      <div class="form-group" style="grid-column: span 2;">
+        <label for="mecanico_id">Mecânico Responsável</label>
+        <select id="mecanico_id" name="mecanico_id" class="form-control">
+          <option value="">Não atribuir ainda...</option>
+          <% mecanicos.forEach(m => { %>
+            <option value="<%= m.id %>"><%= m.nome %> (<%= m.especialidade %>)</option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="form-group" style="grid-column: span 2;">
+        <label for="descricao_problema">Descrição do Problema (Relato do Cliente) *</label>
+        <textarea id="descricao_problema" name="descricao_problema" class="form-control" rows="4" required></textarea>
+      </div>
+    </div>
+    <div class="mt-4"><button type="submit" class="btn">Abrir OS</button></div>
+  </form>
+</div>

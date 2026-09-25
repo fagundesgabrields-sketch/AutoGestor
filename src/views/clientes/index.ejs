@@ -1,0 +1,55 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Clientes</h1>
+    <p style="color: var(--on-surface-variant); font-size: 0.875rem;">Gerenciamento de registros</p>
+  </div>
+  <div class="dashboard-actions">
+    <a href="/clientes/novo" class="btn btn-primary"><i data-feather="plus-circle"></i> Novo Cliente</a>
+  </div>
+</div>
+
+<div class="card">
+  <form action="/clientes" method="GET" class="flex gap-2 mb-4">
+    <input type="text" name="search" class="form-control" placeholder="Buscar por Nome ou CPF..." value="<%= search || '' %>">
+    <button type="submit" class="btn btn-primary"><i data-feather="search"></i> Buscar</button>
+    <% if (search) { %>
+      <a href="/clientes" class="btn btn-secondary">Limpar</a>
+    <% } %>
+  </form>
+
+  <div class="table-responsive" style="border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Telefone</th>
+          <th>E-mail</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% clientes.forEach(cliente => { %>
+          <tr>
+            <td><%= cliente.nome %></td>
+            <td><%= cliente.cpf %></td>
+            <td><%= cliente.telefone %></td>
+            <td><%= cliente.email || '-' %></td>
+            <td class="flex gap-2">
+              <a href="/veiculos?cliente_id=<%= cliente.id %>" class="btn btn-secondary">Veículos</a>
+              <a href="/clientes/<%= cliente.id %>/editar" class="btn btn-secondary" style="padding: 0.375rem;" title="Editar"><i data-feather="edit"></i></a>
+              <form action="/clientes/<%= cliente.id %>?_method=DELETE" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger" style="padding: 0.375rem;" title="Excluir"><i data-feather="trash-2"></i></button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+        <% if (clientes.length === 0) { %>
+          <tr>
+            <td colspan="5" style="text-align: center;">Nenhum cliente encontrado.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

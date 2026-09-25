@@ -1,0 +1,50 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Editar Veículo</h1>
+    <p style="color: var(--on-surface-variant); font-size: 0.875rem;">Preencha as informações abaixo</p>
+  </div>
+  <div class="dashboard-actions">
+    <a href="/veiculos?cliente_id=<%= veiculo.cliente_id %>" class="btn btn-secondary"><i data-feather="arrow-left"></i> Voltar</a>
+  </div>
+</div>
+
+<div class="card">
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+  <form action="/veiculos/<%= veiculo.id %>?_method=PUT" method="POST">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="form-group" style="grid-column: span 2;">
+        <label for="cliente_id">Cliente *</label>
+        <select id="cliente_id" name="cliente_id" class="form-control" required>
+          <% clientes.forEach(c => { %>
+            <option value="<%= c.id %>" <%= veiculo.cliente_id == c.id ? 'selected' : '' %>><%= c.nome %> - CPF: <%= c.cpf %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="placa">Placa *</label>
+        <input type="text" id="placa" name="placa" class="form-control" value="<%= veiculo.placa %>" required>
+      </div>
+      <div class="form-group">
+        <label for="marca">Marca *</label>
+        <input type="text" id="marca" name="marca" class="form-control" value="<%= veiculo.marca %>" required>
+      </div>
+      <div class="form-group">
+        <label for="modelo">Modelo *</label>
+        <input type="text" id="modelo" name="modelo" class="form-control" value="<%= veiculo.modelo %>" required>
+      </div>
+      <div class="form-group">
+        <label for="ano">Ano</label>
+        <input type="number" id="ano" name="ano" class="form-control" value="<%= veiculo.ano || '' %>">
+      </div>
+      <div class="form-group">
+        <label for="cor">Cor</label>
+        <input type="text" id="cor" name="cor" class="form-control" value="<%= veiculo.cor || '' %>">
+      </div>
+    </div>
+    <div class="mt-4">
+      <button type="submit" class="btn">Atualizar</button>
+    </div>
+  </form>
+</div>

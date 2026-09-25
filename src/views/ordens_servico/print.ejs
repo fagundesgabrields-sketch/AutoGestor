@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Comprovante OS #<%= String(os.id).padStart(4, '0') %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --secondary: #475569;
+      --border: #e2e8f0;
+      --surface: #f8fafc;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--primary);
+      margin: 0;
+      padding: 0;
+      background: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .page {
+      background: #ffffff;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 3rem;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .header-logo h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      font-size: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .header-logo p {
+      margin: 0.25rem 0 0 2rem;
+      color: var(--secondary);
+      font-size: 0.875rem;
+    }
+    .header-info {
+      text-align: right;
+    }
+    .header-info h2 {
+      margin: 0;
+      color: var(--secondary);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .header-info strong {
+      font-size: 1.5rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: block;
+      margin-top: 0.25rem;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.125rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .info-box {
+      background: var(--surface);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+    }
+    .info-box span {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--secondary);
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .info-box strong {
+      font-size: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--surface);
+      color: var(--secondary);
+      font-weight: 600;
+    }
+    .text-right { text-align: right; }
+    .total-box {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+    .total-content {
+      background: var(--primary);
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      text-align: right;
+    }
+    .total-content span {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    .total-content strong {
+      font-size: 1.75rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .footer {
+      margin-top: 4rem;
+      text-align: center;
+      color: var(--secondary);
+      font-size: 0.875rem;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+    }
+    .print-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 9999px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      transition: background 0.2s;
+    }
+    .print-btn:hover { background: #0284c7; }
+    
+    @media print {
+      body { background: #fff; }
+      .page { margin: 0; padding: 0; box-shadow: none; max-width: 100%; }
+      .print-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="header">
+      <div class="header-logo">
+        <h1><i data-feather="hexagon"></i> AutoGestor</h1>
+        <p>Oficina Mecânica Pro<br>CNPJ: 14.289.442/0001</p>
+      </div>
+      <div class="header-info">
+        <h2>Ordem de Serviço</h2>
+        <strong>#<%= String(os.id).padStart(4, '0') %></strong>
+        <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">Data: <%= new Date(os.data_abertura).toLocaleDateString('pt-BR') %></p>
+      </div>
+    </div>
+
+    <div class="section grid">
+      <div class="info-box">
+        <span>Cliente</span>
+        <strong><%= os.veiculo.cliente.nome %></strong>
+        <div style="font-size: 0.875rem; margin-top: 0.5rem; color: var(--secondary);">
+          CPF: <%= os.veiculo.cliente.cpf %><br>
+          Tel: <%= os.veiculo.cliente.telefone %>
+        </div>
+      </div>
+      <div class="info-box">
+        <span>Veículo</span>
+        <strong><%= os.veiculo.marca %> <%= os.veiculo.modelo %></strong>
+        <div style="font-size: 0.875rem; margin-top: 0.5rem; color: var(--secondary);">
+          Placa: <%= os.veiculo.placa %> | Ano: <%= os.veiculo.ano %><br>
+          Mecânico Resp: <%= os.mecanico ? os.mecanico.nome : 'N/A' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">Relato do Problema</h3>
+      <p style="margin: 0; font-size: 0.875rem; line-height: 1.6; color: var(--secondary);"><%= os.descricao_problema || 'Nenhum relato preenchido.' %></p>
+    </div>
+
+    <% if (os.servicos_os && os.servicos_os.length > 0) { %>
+    <div class="section">
+      <h3 class="section-title">Serviços Realizados</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th class="text-right">Qtd</th>
+            <th class="text-right">V. Unitário</th>
+            <th class="text-right">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% os.servicos_os.forEach(item => { %>
+          <tr>
+            <td><%= item.servico.nome %></td>
+            <td class="text-right"><%= item.quantidade %></td>
+            <td class="text-right">R$ <%= parseFloat(item.valor_unitario).toLocaleString('pt-BR', {minimumFractionDigits: 2}) %></td>
+            <td class="text-right">R$ <%= parseFloat(item.subtotal).toLocaleString('pt-BR', {minimumFractionDigits: 2}) %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+
+    <% if (os.pecas_os && os.pecas_os.length > 0) { %>
+    <div class="section">
+      <h3 class="section-title">Peças Utilizadas</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th class="text-right">Qtd</th>
+            <th class="text-right">V. Unitário</th>
+            <th class="text-right">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% os.pecas_os.forEach(item => { %>
+          <tr>
+            <td><%= item.peca.nome %></td>
+            <td class="text-right"><%= item.quantidade %></td>
+            <td class="text-right">R$ <%= parseFloat(item.valor_unitario).toLocaleString('pt-BR', {minimumFractionDigits: 2}) %></td>
+            <td class="text-right">R$ <%= parseFloat(item.subtotal).toLocaleString('pt-BR', {minimumFractionDigits: 2}) %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+
+    <div class="total-box">
+      <div class="total-content">
+        <span>Total da O.S.</span>
+        <strong>R$ <%= parseFloat(os.valor_total).toLocaleString('pt-BR', {minimumFractionDigits: 2}) %></strong>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p style="margin: 0;">Este documento não possui valor fiscal.<br>Obrigado pela preferência!</p>
+      <div style="margin-top: 3rem; display: flex; justify-content: center; gap: 4rem;">
+        <div style="border-top: 1px solid var(--secondary); width: 250px; padding-top: 0.5rem;">Assinatura do Responsável</div>
+        <div style="border-top: 1px solid var(--secondary); width: 250px; padding-top: 0.5rem;">Assinatura do Cliente</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="print-btn" onclick="window.print()">
+    <i data-feather="printer"></i> Imprimir Comprovante
+  </button>
+
+  <script>
+    feather.replace();
+  </script>
+</body>
+</html>

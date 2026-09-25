@@ -1,0 +1,50 @@
+<div class="flex justify-between items-center mb-4">
+  <h1>Veículos <%= cliente ? 'de ' + cliente.nome : '' %></h1>
+  <div>
+    <a href="/veiculos/novo<%= cliente ? '?cliente_id=' + cliente.id : '' %>" class="btn">Novo Veículo</a>
+    <% if (cliente) { %>
+      <a href="/clientes" class="btn btn-secondary">Voltar aos Clientes</a>
+    <% } %>
+  </div>
+</div>
+
+<div class="card" style="padding: 0;">
+  <div class="table-responsive" style="border: none; box-shadow: none;" style="border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+    <table>
+      <thead>
+        <tr>
+          <% if (!cliente) { %><th>Cliente</th><% } %>
+          <th>Placa</th>
+          <th>Marca</th>
+          <th>Modelo</th>
+          <th>Ano</th>
+          <th>Cor</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% veiculos.forEach(veiculo => { %>
+          <tr>
+            <% if (!cliente) { %><td><%= veiculo.cliente ? veiculo.cliente.nome : '-' %></td><% } %>
+            <td><%= veiculo.placa %></td>
+            <td><%= veiculo.marca %></td>
+            <td><%= veiculo.modelo %></td>
+            <td><%= veiculo.ano || '-' %></td>
+            <td><%= veiculo.cor || '-' %></td>
+            <td class="flex gap-2">
+              <a href="/veiculos/<%= veiculo.id %>/editar" class="btn btn-secondary" style="padding: 0.375rem;" title="Editar"><i data-feather="edit"></i></a>
+              <form action="/veiculos/<%= veiculo.id %>?_method=DELETE" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger" style="padding: 0.375rem;" title="Excluir"><i data-feather="trash-2"></i></button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+        <% if (veiculos.length === 0) { %>
+          <tr>
+            <td colspan="<%= cliente ? 6 : 7 %>" style="text-align: center;">Nenhum veículo encontrado.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - AutoGestor</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f1f5f9;
+    }
+    .login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-box h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+    .btn-block {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>AutoGestor</h1>
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+    <form action="/auth/login" method="POST">
+      <div class="form-group">
+        <label for="login">Login</label>
+        <input type="text" id="login" name="login" class="form-control" required autofocus>
+      </div>
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-block">Entrar</button>
+    </form>
+    <p style="margin-top: 1rem; font-size: 0.85rem; text-align: center; color: #64748b;">
+      Use: gestor/123456, recepcao/123456, mecanico/123456
+    </p>
+  </div>
+</body>
+</html>

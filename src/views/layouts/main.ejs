@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoGestor - Oficina Mecânica Pro</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Feather Icons for lightweight SVGs -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <!-- Chart.js for Dashboard Graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <% if (typeof usuario !== 'undefined' && usuario) { %>
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-logo"><i data-feather="hexagon"></i></div>
+          <div class="brand-text">
+            <h2>AutoGestor</h2>
+            <span>Oficina Mecânica Pro</span>
+          </div>
+        </div>
+
+        <div class="sidebar-action">
+          <a href="/ordens-servico/nova" class="btn btn-primary w-full justify-center">
+            <i data-feather="plus"></i> Nova O.S.
+          </a>
+        </div>
+
+        <nav class="sidebar-nav">
+          <ul>
+            <li class="active">
+              <a href="/dashboard">
+                <i data-feather="layout"></i> Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="/ordens-servico">
+                <i data-feather="tool"></i> Ordens de Serviço
+                <span class="badge badge-light ml-auto">14</span>
+              </a>
+            </li>
+            <li>
+              <a href="/clientes">
+                <i data-feather="users"></i> Clientes
+              </a>
+            </li>
+            <li>
+              <a href="/pecas">
+                <i data-feather="box"></i> Estoque
+                <span class="badge badge-warning-subtle ml-auto">3 alertas</span>
+              </a>
+            </li>
+            <li>
+              <a href="/configuracoes">
+                <i data-feather="settings"></i> Configurações
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+          <ul>
+            <li>
+              <a href="/ajuda"><i data-feather="help-circle"></i> Ajuda e Suporte</a>
+            </li>
+            <li>
+              <div class="store-selector">
+                <i data-feather="monitor"></i>
+                <div class="store-info">
+                  <strong>Oficina Central</strong>
+                  <span>CNPJ: 14.289.442/0001</span>
+                </div>
+                <i data-feather="chevron-down" class="ml-auto"></i>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    <% } %>
+
+    <div class="main-wrapper">
+      <% if (typeof usuario !== 'undefined' && usuario) { %>
+        <!-- Topbar -->
+        <header class="topbar">
+          <div class="search-bar">
+            <i data-feather="search"></i>
+            <input type="text" placeholder="Buscar por O.S., placa (ABC-1234), cliente ou chassi..." class="form-control">
+            <span class="shortcut">Ctrl+K</span>
+          </div>
+
+          <div class="topbar-actions">
+            <div class="date-selector">
+              <i data-feather="calendar"></i>
+              <div class="date-info">
+                <span>Hoje,</span>
+                <strong>24 de Outubro</strong>
+              </div>
+              <i data-feather="chevron-down"></i>
+            </div>
+
+            <div class="status-badge-top">
+              <span class="status-dot"></span>
+              <div class="status-text">
+                <strong>Oficina Aberta</strong>
+                <span>(4/6 boxes ocupados)</span>
+              </div>
+            </div>
+
+            <button class="icon-btn"><i data-feather="bell"></i><span class="notification-dot"></span></button>
+            <button class="icon-btn"><i data-feather="sliders"></i></button>
+
+            <div class="user-profile">
+              <div class="user-avatar">CS</div>
+              <div class="user-info">
+                <strong>Carlos Silva</strong>
+                <span>Gerente de Oficina</span>
+              </div>
+            </div>
+            <a href="/auth/logout" class="icon-btn text-danger" title="Sair"><i data-feather="log-out"></i></a>
+          </div>
+        </header>
+      <% } %>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <%- body %>
+      </main>
+    </div>
+  </div>
+  
+  <script src="/js/script.js"></script>
+  <script>
+    feather.replace(); // Initialize icons
+  </script>
+</body>
+</html>

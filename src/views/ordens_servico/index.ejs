@@ -1,0 +1,47 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Ordens de Serviço</h1>
+    <p style="color: var(--on-surface-variant); font-size: 0.875rem;">Gerenciamento de registros</p>
+  </div>
+  <div class="dashboard-actions">
+    <a href="/ordens-servico/nova" class="btn btn-primary"><i data-feather="plus-circle"></i> Abrir Nova OS</a>
+  </div>
+</div>
+
+<div class="card" style="padding: 0;">
+  <div class="table-responsive" style="border: none; box-shadow: none;" style="border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Veículo</th>
+          <th>Mecânico</th>
+          <th>Status</th>
+          <th>Valor Total</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% ordens.forEach(os => { %>
+          <tr>
+            <td>#<%= os.id %></td>
+            <td><%= os.veiculo.cliente.nome %></td>
+            <td><%= os.veiculo.marca %> <%= os.veiculo.modelo %> - <%= os.veiculo.placa %></td>
+            <td><%= os.mecanico ? os.mecanico.nome : 'Não atribuído' %></td>
+            <td>
+              <span class="badge badge-<%= os.status.replace(' ', '').toLowerCase() %>"><%= os.status %></span>
+            </td>
+            <td>R$ <%= parseFloat(os.valor_total).toFixed(2) %></td>
+            <td>
+              <a href="/ordens-servico/<%= os.id %>" class="btn btn-secondary" style="padding: 0.375rem;" title="Detalhes"><i data-feather="eye"></i></a>
+            </td>
+          </tr>
+        <% }) %>
+        <% if (ordens.length === 0) { %>
+          <tr><td colspan="7" style="text-align: center;">Nenhuma OS encontrada.</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

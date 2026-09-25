@@ -1,0 +1,150 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Ordem de Serviço #<%= os.id %></h1>
+    <p style="color: var(--on-surface-variant); font-size: 0.875rem;">Gerenciamento de registros</p>
+  </div>
+  <div class="dashboard-actions">
+    <a href="/ordens-servico/<%= os.id %>/print" target="_blank" class="btn btn-secondary"><i data-feather="printer"></i> Imprimir O.S.</a>
+    <a href="/ordens-servico" class="btn btn-secondary"><i data-feather="arrow-left"></i> Voltar</a>
+  </div>
+</div>
+
+<div class="grid grid-cols-2 gap-4">
+  <!-- Detalhes da OS -->
+  <div class="card">
+    <h2>Detalhes Gerais</h2>
+    <p><strong>Status Atual:</strong> <%= os.status %></p>
+    <p><strong>Cliente:</strong> <%= os.veiculo.cliente.nome %></p>
+    <p><strong>Veículo:</strong> <%= os.veiculo.marca %> <%= os.veiculo.modelo %> - <%= os.veiculo.placa %></p>
+    <p><strong>Mecânico:</strong> <%= os.mecanico ? os.mecanico.nome : 'Nenhum' %></p>
+    <p><strong>Data de Abertura:</strong> <%= new Date(os.data_abertura).toLocaleString('pt-BR') %></p>
+    <% if (os.data_conclusao) { %>
+      <p><strong>Data de Conclusão:</strong> <%= new Date(os.data_conclusao).toLocaleString('pt-BR') %></p>
+    <% } %>
+    <p><strong>Problema Relatado:</strong> <%= os.descricao_problema %></p>
+    <hr style="margin: 1rem 0;">
+    <h3>Valor Total: R$ <%= parseFloat(os.valor_total).toFixed(2) %></h3>
+    
+    <% if (os.status !== 'Concluida' && os.status !== 'Cancelada') { %>
+      <form action="/ordens-servico/<%= os.id %>/status" method="POST" class="mt-4">
+        <div class="flex gap-2">
+          <select name="status" class="form-control" style="width:auto;">
+            <option value="Aberta" <%= os.status === 'Aberta' ? 'selected' : '' %>>Aberta</option>
+            <option value="Em Andamento" <%= os.status === 'Em Andamento' ? 'selected' : '' %>>Em Andamento</option>
+            <option value="Concluida" <%= os.status === 'Concluida' ? 'selected' : '' %>>Concluída</option>
+            <option value="Cancelada" <%= os.status === 'Cancelada' ? 'selected' : '' %>>Cancelada</option>
+          </select>
+          <button type="submit" class="btn">Atualizar Status</button>
+        </div>
+      </form>
+    <% } %>
+  </div>
+
+  <!-- Pagamentos -->
+  <div class="card">
+    <h2>Pagamentos</h2>
+    <% let totalPago = 0; %>
+    <% if (os.pagamentos.length > 0) { %>
+      <ul>
+        <% os.pagamentos.forEach(p => { totalPago += parseFloat(p.valor); %>
+          <li>R$ <%= parseFloat(p.valor).toFixed(2) %> - <%= p.forma_pagamento %> (<%= new Date(p.data_pagamento).toLocaleDateString('pt-BR') %>)</li>
+        <% }) %>
+      </ul>
+      <p style="margin-top:1rem;"><strong>Falta Pagar:</strong> R$ <%= (parseFloat(os.valor_total) - totalPago).toFixed(2) %></p>
+    <% } else { %>
+      <p>Nenhum pagamento registrado.</p>
+    <% } %>
+
+    <% if (os.status === 'Concluida' && totalPago < parseFloat(os.valor_total)) { %>
+      <hr style="margin: 1rem 0;">
+      <h4>Registrar Pagamento</h4>
+      <form action="/ordens-servico/<%= os.id %>/pagamentos" method="POST">
+        <div class="flex gap-2 items-center">
+          <input type="number" step="0.01" name="valor" class="form-control" placeholder="Valor" max="<%= parseFloat(os.valor_total) - totalPago %>" required>
+          <select name="forma_pagamento" class="form-control" required>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartao">Cartão</option>
+            <option value="Pix">Pix</option>
+            <option value="Boleto">Boleto</option>
+          </select>
+          <button type="submit" class="btn">Pagar</button>
+        </div>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<!-- Serviços e Peças -->
+<div class="grid grid-cols-2 gap-4 mt-4">
+  <div class="card">
+    <h2>Serviços Adicionados</h2>
+    <table class="mb-4">
+      <thead><tr><th>Serviço</th><th>Qtd</th><th>Subtotal</th><th>Ação</th></tr></thead>
+      <tbody>
+        <% os.servicos_os.forEach(sos => { %>
+          <tr>
+            <td><%= sos.servico.nome %></td>
+            <td><%= sos.quantidade %></td>
+            <td>R$ <%= parseFloat(sos.subtotal).toFixed(2) %></td>
+            <td>
+              <% if (os.status !== 'Concluida' && os.status !== 'Cancelada') { %>
+                <form action="/ordens-servico/<%= os.id %>/servicos/<%= sos.id %>?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-danger" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Remover</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <% if (os.status !== 'Concluida' && os.status !== 'Cancelada') { %>
+      <form action="/ordens-servico/<%= os.id %>/servicos" method="POST" class="flex gap-2 items-center">
+        <select name="servico_id" class="form-control" required>
+          <option value="">Selecione um serviço...</option>
+          <% servicos.forEach(s => { %>
+            <option value="<%= s.id %>"><%= s.nome %> - R$ <%= parseFloat(s.valor_mao_obra).toFixed(2) %></option>
+          <% }) %>
+        </select>
+        <input type="number" name="quantidade" value="1" min="1" class="form-control" style="width: 80px;" required>
+        <button type="submit" class="btn">Add</button>
+      </form>
+    <% } %>
+  </div>
+
+  <div class="card">
+    <h2>Peças Adicionadas</h2>
+    <table class="mb-4">
+      <thead><tr><th>Peça</th><th>Qtd</th><th>Subtotal</th><th>Ação</th></tr></thead>
+      <tbody>
+        <% os.pecas_os.forEach(pos => { %>
+          <tr>
+            <td><%= pos.peca.nome %></td>
+            <td><%= pos.quantidade %></td>
+            <td>R$ <%= parseFloat(pos.subtotal).toFixed(2) %></td>
+            <td>
+              <% if (os.status !== 'Concluida' && os.status !== 'Cancelada') { %>
+                <form action="/ordens-servico/<%= os.id %>/pecas/<%= pos.id %>?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-danger" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Remover</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <% if (os.status !== 'Concluida' && os.status !== 'Cancelada') { %>
+      <form action="/ordens-servico/<%= os.id %>/pecas" method="POST" class="flex gap-2 items-center">
+        <select name="peca_id" class="form-control" required>
+          <option value="">Selecione uma peça...</option>
+          <% pecas.forEach(p => { %>
+            <option value="<%= p.id %>" <%= p.estoque === 0 ? 'disabled' : '' %>><%= p.nome %> - R$ <%= parseFloat(p.valor_unitario).toFixed(2) %> (Estoque: <%= p.estoque %>)</option>
+          <% }) %>
+        </select>
+        <input type="number" name="quantidade" value="1" min="1" class="form-control" style="width: 80px;" required>
+        <button type="submit" class="btn">Add</button>
+      </form>
+    <% } %>
+  </div>
+</div>
