@@ -39,17 +39,19 @@
     <form action="/auth/login" method="POST">
       <div class="form-group">
         <label for="login">Login</label>
-        <input type="text" id="login" name="login" class="form-control" required autofocus>
+        <input type="text" id="login" name="login" class="form-control" value="gestor" required autofocus>
       </div>
       <div class="form-group">
         <label for="senha">Senha</label>
-        <input type="password" id="senha" name="senha" class="form-control" required>
+        <input type="password" id="senha" name="senha" class="form-control" value="123456" required>
       </div>
       <button type="submit" class="btn btn-block">Entrar</button>
     </form>
-    <p style="margin-top: 1rem; font-size: 0.85rem; text-align: center; color: #64748b;">
-      Use: gestor/123456, recepcao/123456, mecanico/123456
-    </p>
+    <div style="margin-top: 1.5rem; text-align: center; padding: 1rem; background-color: #f1f5f9; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; color: #334155;">
+      <strong>👨‍🏫 Acesso do Avaliador</strong><br>
+      As credenciais de Gestor já estão preenchidas para facilitar o acesso.<br>
+      Apenas clique em <b>Entrar</b>.
+    </div>
   </div>
 </body>
 </html>
